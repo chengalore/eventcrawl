@@ -1,10 +1,51 @@
 const puppeteer = require('puppeteer');
 const url = 'https://i.lumine.jp/item/589230003060004';
+const checkOverlay = require('./overlayChecker');
+const checkInpage = require('./inpageChecker');
 
 async function crawlNetworkTab(url) {
   console.log('Function running');
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
+
+  // Enable request interception
+  await page.setRequestInterception(true);
+
+  // Store the filtered network requests
+  const filteredRequests = [];
+
+  page.on('request', (request) => {
+    const urlWithQuery = request.url();
+
+    // if (urlWithQuery.includes('virtusize')) {
+    //   if (request.postData()) {
+    //     try {
+    //       const { storeName, name, source, externalUserId, isKid } = JSON.parse(request.postData());
+    //       filteredRequests.push({ storeName, name, source, externalUserId, isKid });
+    //     } catch (error) {
+    //       console.error('Error parsing JSON:', error);
+    //     }
+    //   }
+    // }
+    if (urlWithQuery.includes('virtusize')) {
+      const postData = request.postData();
+      if (postData) {
+        try {
+          const { storeName, name, source, externalUserId, isKid } = JSON.parse(postData);
+          if (storeName !== undefined) {
+            filteredRequests.push({ storeName, name, source, externalUserId, isKid });
+          }
+        } catch (error) {
+          console.error('Error parsing JSON:', error);
+        }
+      }
+    }
+    
+
+    
+    // Continue all requests
+    request.continue();
+  });
 
   // Navigate to the URL
   await page.goto(url, {
@@ -12,38 +53,16 @@ async function crawlNetworkTab(url) {
     timeout: 0,
   });
 
-  // Close the overlay by clicking the button inside the shadow root
-  await page.evaluate(() => {
-    const overlaySelector = 'div#zigzag-worldshopping-checkout'; // Selector for the overlay element
-    const overlayElement = document.querySelector(overlaySelector);
-    if (overlayElement) {
-      const shadowRoot = overlayElement.shadowRoot;
-      const closeButton = shadowRoot.querySelector('#zigzag-test__modal-close');
-      if (closeButton) {
-        closeButton.click();
-      } else {
-        overlayElement.style.display = 'none';
-      }
-    }
-  });
+  const overlaySelector = 'div#zigzag-worldshopping-checkout';
+  await checkOverlay(page, overlaySelector);
 
-  // Wait for the element to be visible
-  await page.waitForSelector('#vs-inpage');
-  console.log('Inpage found');
-
-  // Add a delay before clicking the div with ID 'vs-inpage'
-  await page.waitForTimeout(1000); // Wait for 1000 milliseconds (1 second)
-  const element = await page.$('#vs-inpage');
-  await element.click();
-
-  if (!element) {
-    console.log("'#vs-inpage' element not found");
-  } else {
-    console.log("'#vs-inpage' element clicked");
-  }
+  const inpageSelector = '#vs-inpage';
+  await checkInpage(page, inpageSelector);
 
   // Close the browser
-//   await browser.close();
+  // await browser.close();
+
+  console.log('Filtered Requests:', filteredRequests);
 }
 
 crawlNetworkTab(url);
