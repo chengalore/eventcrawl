@@ -1,10 +1,13 @@
-const puppeteer = require('puppeteer');
-const url = 'https://i.lumine.jp/item/589230003060004';
-const checkOverlay = require('./overlayChecker');
-const checkInpage = require('./inpageChecker');
+const puppeteer = require("puppeteer");
+const url = "https://shop.adidas.jp/products/HC4509/";
+const checkOverlay = require("./overlayChecker");
+const newUser = require("./newUser");
+const checkInpage = require("./inpageChecker");
+// const signInAccount = require("./signInAccount");
+// const createAccount = require("./createAccount");
 
 async function crawlNetworkTab(url) {
-  console.log('Function running');
+  console.log("Function running");
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
 
@@ -14,7 +17,7 @@ async function crawlNetworkTab(url) {
   // Store the filtered network requests
   const filteredRequests = [];
 
-  page.on('request', (request) => {
+  page.on("request", (request) => {
     const urlWithQuery = request.url();
 
     // if (urlWithQuery.includes('virtusize')) {
@@ -27,42 +30,56 @@ async function crawlNetworkTab(url) {
     //     }
     //   }
     // }
-    if (urlWithQuery.includes('virtusize')) {
+    if (urlWithQuery.includes("virtusize")) {
       const postData = request.postData();
       if (postData) {
         try {
-          const { storeName, name, source, externalUserId, isKid } = JSON.parse(postData);
+          const { storeName, name, source, externalUserId, isKid } =
+            JSON.parse(postData);
           if (storeName !== undefined) {
-            filteredRequests.push({ storeName, name, source, externalUserId, isKid });
+            filteredRequests.push({
+              storeName,
+              name,
+              source,
+              externalUserId,
+              isKid,
+            });
           }
         } catch (error) {
-          console.error('Error parsing JSON:', error);
+          console.error("Error parsing JSON:", error);
         }
       }
     }
-    
 
-    
     // Continue all requests
     request.continue();
   });
 
   // Navigate to the URL
   await page.goto(url, {
-    waitUntil: 'networkidle0',
+    waitUntil: "networkidle0",
     timeout: 0,
   });
 
-  const overlaySelector = 'div#zigzag-worldshopping-checkout';
+  const overlaySelector = "div#zigzag-worldshopping-checkout";
   await checkOverlay(page, overlaySelector);
 
-  const inpageSelector = '#vs-inpage';
+  const newUserSelector = "#vs-inpage";
+  await newUser(page, newUserSelector);
+
+  const inpageSelector = "#vs-inpage";
   await checkInpage(page, inpageSelector);
+
+  // const inpageSelectorSignUp = "#vs-inpage";
+  // await createAccount(page, inpageSelectorSignUp);
+
+  // const inpageSelectorLogIn = "#vs-inpage";
+  // await signInAccount(page, inpageSelectorLogIn);
 
   // Close the browser
   // await browser.close();
 
-  console.log('Filtered Requests:', filteredRequests);
+  console.log("Filtered Requests:", filteredRequests);
 }
 
 crawlNetworkTab(url);
