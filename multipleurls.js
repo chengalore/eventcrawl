@@ -1,10 +1,11 @@
 const puppeteer = require("puppeteer");
+const exportToHTML = require("./export");
+const generateHTMLTable = require("./htmlGenerator");
 
 const urls = [
-  "https://www.style-deli.com/c/all/234132",
-  "https://shop.adidas.jp/products/HC4509/",
-  "https://www.asics.com/jp/ja-jp/%E3%83%89%E3%83%A9%E3%82%A4%E3%83%9D%E3%83%AD%E3%82%B7%E3%83%A3%E3%83%84/p/2041A256-408.html",
   "https://www.ralphlauren.co.jp/item/73449955.html",
+  "https://www.asics.com/jp/ja-jp/%E3%83%89%E3%83%A9%E3%82%A4%E3%83%9D%E3%83%AD%E3%82%B7%E3%83%A3%E3%83%84/p/2041A256-408.html/",
+  "https://i.lumine.jp/item/589230003060004",
   // Add more URLs here
 ];
 
@@ -15,17 +16,27 @@ const checkInpage = require("./inpageChecker");
 // const createAccount = require("./createAccount");
 
 (async () => {
+  const filteredRequests = [];
+
   for (const url of urls) {
     try {
-      await crawlNetworkTab(url);
+      const requests = await crawlNetworkTab(url);
+      filteredRequests.push(...requests);
       await delay(5000); // Delay between URLs (in milliseconds)
     } catch (error) {
       console.error(`Error crawling ${url}:`, error);
       console.log(`Rerunning ${url}`);
-      await crawlNetworkTab(url);
+      const requests = await crawlNetworkTab(url);
+      filteredRequests.push(...requests);
       await delay(5000); // Delay between retries (in milliseconds)
     }
   }
+
+  // Generate the HTML table
+  const htmlTable = generateHTMLTable(filteredRequests);
+
+  // Export the result to HTML
+  exportToHTML(htmlTable);
 })();
 
 async function crawlNetworkTab(url) {
@@ -98,6 +109,8 @@ async function crawlNetworkTab(url) {
   await browser.close();
 
   console.log("Filtered Requests:", filteredRequests);
+
+  return filteredRequests;
 }
 
 function delay(ms) {
