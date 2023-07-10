@@ -1,27 +1,45 @@
-async function checkOverlay(page, overlaySelector) {
+async function checkOverlay(page, overlaySelector, url) {
+  console.log("checking overlay");
   const overlayElement = await page.$(overlaySelector);
+
   //for websites that have overlay or pop-up
   if (overlayElement) {
-    await page.evaluate((overlaySelector) => {
-      const overlayElement = document.querySelector(overlaySelector);
-      const shadowRoot = overlayElement.shadowRoot;
-      const closeButton = shadowRoot.querySelector("#zigzag-test__modal-close");
-      if (closeButton) {
-        closeButton.click();
-      } else {
-        overlayElement.style.display = "none";
-      }
-    }, overlaySelector);
-  }
-  // Wait for a brief timeout to allow the second overlay to appear
-  await page.waitForTimeout(1000);
+    await page.evaluate(
+      (overlaySelector, url) => {
+        const overlayElement = document.querySelector(overlaySelector);
+        const shadowRoot = overlayElement.shadowRoot;
 
-  // Select and close the second overlay if it exists
-  const secondOverlayElement = await page.$(
-    'div[class*="karte-widget__content"] i[class^="_icon-close"]'
-  );
-  if (secondOverlayElement) {
-    await secondOverlayElement.click();
+        let closeButton = shadowRoot.querySelector("#zigzag-test__modal-close");
+        if (
+          url === "https://sanyo-i.jp/s/mackintosh-philosophy-mens/p/R8R4560260"
+        ) {
+          console.log("checking sanyo");
+          closeButton = shadowRoot.querySelector(
+            "#zigzag-test__modal-close:not(.src-___index__zigzag___dycI0)"
+          );
+          // select the second overlay if sanyo
+          async function closeSecondOverlay() {
+            const overlay2 =
+              'div[class*="_card__4YEL"] button[class*="_btn-close"] i';
+            const overlayButton = document.querySelector(overlay2);
+            if (overlayButton) {
+              overlayButton.click();
+              console.log("2nd overlay x button clicked");
+            }
+          }
+          closeSecondOverlay();
+        } else {
+          closeButton = shadowRoot.querySelector("#zigzag-test__modal-close");
+        }
+        if (closeButton) {
+          closeButton.click();
+        } else {
+          overlayElement.style.display = "none";
+        }
+      },
+      overlaySelector,
+      url
+    );
   }
 }
 

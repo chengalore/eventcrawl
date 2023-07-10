@@ -1,13 +1,35 @@
 const puppeteer = require("puppeteer");
-const url = "https://shop.adidas.jp/products/HC4509/";
+
+const urls = [
+  "https://www.style-deli.com/c/all/234132",
+  "https://shop.adidas.jp/products/HC4509/",
+  "https://www.asics.com/jp/ja-jp/%E3%83%89%E3%83%A9%E3%82%A4%E3%83%9D%E3%83%AD%E3%82%B7%E3%83%A3%E3%83%84/p/2041A256-408.html",
+  "https://www.ralphlauren.co.jp/item/73449955.html",
+  // Add more URLs here
+];
+
 const checkOverlay = require("./overlayChecker");
 const newUser = require("./newUser");
 const checkInpage = require("./inpageChecker");
 // const signInAccount = require("./signInAccount");
 // const createAccount = require("./createAccount");
 
+(async () => {
+  for (const url of urls) {
+    try {
+      await crawlNetworkTab(url);
+      await delay(5000); // Delay between URLs (in milliseconds)
+    } catch (error) {
+      console.error(`Error crawling ${url}:`, error);
+      console.log(`Rerunning ${url}`);
+      await crawlNetworkTab(url);
+      await delay(5000); // Delay between retries (in milliseconds)
+    }
+  }
+})();
+
 async function crawlNetworkTab(url) {
-  console.log("Function running");
+  console.log(`Crawling ${url}`);
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
 
@@ -61,6 +83,7 @@ async function crawlNetworkTab(url) {
   const newUserSelector = "#vs-inpage";
   await newUser(page, newUserSelector);
 
+  // Implement other functions as needed
   const inpageSelector = "#vs-inpage";
   await checkInpage(page, inpageSelector);
 
@@ -70,10 +93,13 @@ async function crawlNetworkTab(url) {
   // const inpageSelectorLogIn = "#vs-inpage";
   // await signInAccount(page, inpageSelectorLogIn);
 
-  // Close the browser
-  // await browser.close();
+  // Close the page and browser
+  await page.close();
+  await browser.close();
 
   console.log("Filtered Requests:", filteredRequests);
 }
 
-crawlNetworkTab(url);
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
