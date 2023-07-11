@@ -1,19 +1,16 @@
 const puppeteer = require("puppeteer");
-const exportToHTML = require("./export");
+const checkOverlay = require("./overlayChecker");
+const newUser = require("./newUser");
+// const checkInpage = require("./inpageChecker");
+// const signInAccount = require("./signInAccount");
+// const createAccount = require("./createAccount");
 const generateHTMLTable = require("./htmlGenerator");
-
+const exportToHTML = require("./export");
 const urls = [
-  "https://www.ralphlauren.co.jp/item/73449955.html",
-  "https://www.asics.com/jp/ja-jp/%E3%83%89%E3%83%A9%E3%82%A4%E3%83%9D%E3%83%AD%E3%82%B7%E3%83%A3%E3%83%84/p/2041A256-408.html/",
+  "https://sanyo-i.jp/s/mackintosh-philosophy-mens/p/R8R4560260",
   "https://i.lumine.jp/item/589230003060004",
   // Add more URLs here
 ];
-
-const checkOverlay = require("./overlayChecker");
-const newUser = require("./newUser");
-const checkInpage = require("./inpageChecker");
-// const signInAccount = require("./signInAccount");
-// const createAccount = require("./createAccount");
 
 (async () => {
   const filteredRequests = [];
@@ -77,7 +74,7 @@ async function crawlNetworkTab(url) {
     // Continue all requests
     request.continue();
   });
-
+  //add delay before opening inpage for stores with overlay
   if (url === "https://sanyo-i.jp/s/mackintosh-philosophy-mens/p/R8R4560260") {
     await page.goto(url);
     await page.waitForTimeout(5000);
@@ -88,6 +85,7 @@ async function crawlNetworkTab(url) {
     });
   }
 
+  //List of Actions
   const overlaySelector = "div#zigzag-worldshopping-checkout";
   await checkOverlay(page, overlaySelector, url);
 
@@ -95,8 +93,8 @@ async function crawlNetworkTab(url) {
   await newUser(page, newUserSelector);
 
   // Implement other functions as needed
-  const inpageSelector = "#vs-inpage";
-  await checkInpage(page, inpageSelector);
+  // const inpageSelector = "#vs-inpage";
+  // await checkInpage(page, inpageSelector);
 
   // const inpageSelectorSignUp = "#vs-inpage";
   // await createAccount(page, inpageSelectorSignUp);
@@ -112,7 +110,7 @@ async function crawlNetworkTab(url) {
 
   return filteredRequests;
 }
-
+//add delay on opening new URL
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
