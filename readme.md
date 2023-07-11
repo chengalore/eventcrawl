@@ -1,3 +1,7 @@
+# Event Crawler
+
+Node version: v18.16.1
+
 // Purpose: to check and record events
 // type node multipleurls.js to test multiple URLs
 // const puppeteer = require("puppeteer"); - required
