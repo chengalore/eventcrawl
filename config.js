@@ -10,7 +10,7 @@ const config = {
     inpage: {
       name: "Inpage Widget",
       location: "#vs-inpage",
-      timeout: 1000,
+      timeout: 2000,
     },
     checkBox: {
       name: "Privacy Policy",
@@ -38,7 +38,7 @@ const config = {
     addItemButton: {
       name: "Add Item Button",
       location:
-        '#vs-aoyama-main-modal > div:nth-child(3) > div:nth-child(2) > div:nth-child(4) > div:nth-child(2) > div > div > button span[class^="_root_"]',
+        '#vs-aoyama-main-modal div[class*="_root"] [class*="_avatarOuterContainer"]',
       timeout: 2000,
     },
     addNewItem: {
@@ -57,6 +57,12 @@ const config = {
       name: "User Selected Size",
       location:
         '#vs-aoyama-main-modal button[class^="_root"][class*="_sizeButton"] + *',
+      timeout: 2000,
+    },
+    oneSize: {
+      name: "One Size",
+      location:
+        '#vs-aoyama-main-modal div[class*="_root"] [class*="_oneSizeContainer"]',
       timeout: 2000,
     },
     editBodyInfoButton: {
@@ -115,7 +121,7 @@ const config = {
   },
   overlay: {
     name: "overlay",
-    location: "div#zigzag-worldshopping-checkout",
+    location: "#zigzag-worldshopping-checkout",
     timeout: 4000,
   },
 };

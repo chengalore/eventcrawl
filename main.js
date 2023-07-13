@@ -3,7 +3,7 @@ const crawl = require("./crawl");
 const urls = require("./library/urls.json");
 
 if (!config.multipleUrl) {
-  crawl(config, urls.underArmour);
+  crawl(config, urls.lumine);
 } else {
   for (const key in urls) {
     const url = urls[key];

@@ -12,6 +12,7 @@ async function waitAndClick(page, selector) {
     await page.type(selector.location, "Password123!");
     return;
   }
+  if (!element) return;
   await element.click();
   console.log(selector.name + " clicked");
 }

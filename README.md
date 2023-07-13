@@ -83,7 +83,7 @@ Ensure you're in the root directory of the Event Crawler project in your termina
 Run the following command to start the crawler:
 
 Copy code
-node run start
+npm run start
 
 This will execute the main script and initiate the crawling process.
 
