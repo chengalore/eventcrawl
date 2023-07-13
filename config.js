@@ -1,10 +1,10 @@
 //this is where you store all values
 const config = {
-  multipleUrl: true,
+  multipleUrl: false,
   crawl: true,
   slowMode: true,
   slowModeMultiplier: 1.5,
-  headless: true,
+  headless: false,
   signUp: {},
   elements: {
     inpage: {

@@ -64,7 +64,14 @@ Before running Event Crawler, you may need to configure certain settings accordi
 
 Open the config.js file in the root directory of the project.
 
-Modify the configuration options as needed. This may include specifying the URLs to crawl, setting delay intervals, defining scraping rules, or adjusting other parameters.
+Modify the configuration options as needed.
+
+    multipleUrl:
+    crawl:
+    slowMode:
+    slowModeMultiplier:
+    headless:
+    signUp:
 
 Save the changes.
 
@@ -76,11 +83,8 @@ Ensure you're in the root directory of the Event Crawler project in your termina
 Run the following command to start the crawler:
 
 Copy code
-node index.js
+node run start
+
 This will execute the main script and initiate the crawling process.
 
 Event Crawler will start visiting the specified URLs, extracting event information, and storing it for further processing.
-
-Once the crawling process is complete, you can find the extracted event data in the desired output format, ready for analysis or integration into other systems.
-
-Feel free to customize these installation instructions based on the specific requirements and setup of your Event Crawler. Provide any additional steps or considerations that users need to be aware of during the installation process.
