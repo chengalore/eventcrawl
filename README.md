@@ -1,22 +1,5 @@
 # Event Crawler Node version: v18.16.1
 
-Purpose: to check and record events
-
-- type node multipleurls.js to test multiple URLs
-- const puppeteer = require("puppeteer"); - required
-- const checkOverlay = require("./overlayChecker") - required, to remove overlays
-- const newUser = require("./newUser"); - optional, check new user flow
-- const checkInpage = require("./inpageChecker");- optional, check functions inside fit illustrator like compare size, add item to wardrobe
-- const signInAccount = require("./signInAccount"); - optional, run overlay first then this
-- const createAccount = require("./createAccount");- optional, run overlay first then this
-- const generateHTMLTable = require("./htmlGenerator");- optional
-- const exportToHTML = require("./export");- optional
-- index.html - if run, you'll see live viewer
-- htmlGenerator - stores my filtered requests in html format
-- export.js - function to use to export result or filtered request to html
-
-# Event Crawler Node version: v18.16.1
-
 Event Crawler is designed to extract event information from various websites. It automates the process of gathering data such as event details, providing automatic qa solutions.
 
 By leveraging web scraping techniques and utilizing the Puppeteer library, Event Crawler allows users to specify a list of URLs to crawl and collect event data from. The tool can handle websites with overlays, pop-ups, and other dynamic elements, ensuring accurate and comprehensive data extraction.
