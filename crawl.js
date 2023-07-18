@@ -1,13 +1,11 @@
-//list of functions
 const puppeteer = require("puppeteer");
 const waitAndClick = require("./functions/waitAndClick");
 const checkOverlay = require("./functions/overlayChecker");
 const { basicEvents } = require("./config");
 
-//initiate puppeteer
 async function crawl(config, url) {
   const browser = await puppeteer.launch({
-    headless: config.headless ? "new" : false,
+    headless: config.headless ? true : false,
   });
   const page = await browser.newPage();
 
@@ -50,26 +48,26 @@ async function crawl(config, url) {
     timeout: 0,
   });
 
-  // run function
-  //
+  // Run function
   try {
-    checkOverlay(page, config.overlay.location, url);
+    await checkOverlay(page, config.overlay.location, url);
     await page.waitForTimeout(config.overlay.timeout);
   } catch (error) {
-    checkOverlay(page, config.overlay.location, url);
+    await checkOverlay(page, config.overlay.location, url);
     await page.waitForTimeout(config.overlay.timeout);
   }
 
   const el = config.elements;
 
   for (const key in el) {
-    waitAndClick(page, el[key]);
+    await waitAndClick(page, el[key]);
     await page.waitForTimeout(
       config.slowMode
         ? el[key].timeout * config.slowModeMultiplier
         : el[key].timeout
     );
-    if (basicEvents && el[key].name === "Privacy Policy") {
+
+    if (basicEvents && el[key].name === "Inpage Widget") {
       await page.close();
       await browser.close();
       console.log(filteredRequests);
@@ -77,8 +75,7 @@ async function crawl(config, url) {
     }
   }
 
-  //end function
-
+  // End function
   await page.waitForTimeout(5000);
   console.log(filteredRequests);
   await page.waitForTimeout(10000);

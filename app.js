@@ -26,8 +26,8 @@ app.get("/start", (req, res) => {
 
   test()
     .then((crawler) => {
-      console.log(crawler);
-      res.send(crawler); // Send the result to the client
+      const flattenedResult = crawler.flat(); // Flatten the nested arrays of responses
+      res.send(JSON.stringify(flattenedResult)); // Send the flattened result to the client
     })
     .catch((error) => {
       console.error(error);
