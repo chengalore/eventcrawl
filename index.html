@@ -3,9 +3,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Event Crawl3er</title>
+    <title>Event Crawler</title>
   </head>
   <body>
-    <button>Start Crawling</button>
+    <h1>Event Crawler</h1>
+    <input type="submit" value="Start" onclick="submit()" />
+
+    <div id="result">
+      <table>
+        <tr>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+
+    <script type="text/javascript">
+      function submit() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            var resultDiv = document.getElementById("result");
+            resultDiv.innerText = xhr.responseText;
+          }
+        };
+        xhr.open("GET", "http://localhost:3000/start", true);
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded; charset=UTF-8"
+        );
+        xhr.send();
+      }
+    </script>
   </body>
 </html>

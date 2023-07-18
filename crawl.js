@@ -2,6 +2,7 @@
 const puppeteer = require("puppeteer");
 const waitAndClick = require("./functions/waitAndClick");
 const checkOverlay = require("./functions/overlayChecker");
+const { basicEvents } = require("./config");
 
 //initiate puppeteer
 async function crawl(config, url) {
@@ -62,22 +63,28 @@ async function crawl(config, url) {
   const el = config.elements;
 
   for (const key in el) {
-    waitAndClick(page, el[key], el[key].timeout);
+    waitAndClick(page, el[key]);
     await page.waitForTimeout(
       config.slowMode
         ? el[key].timeout * config.slowModeMultiplier
         : el[key].timeout
     );
+    if (basicEvents && el[key].name === "Privacy Policy") {
+      await page.close();
+      await browser.close();
+      console.log(filteredRequests);
+      return filteredRequests;
+    }
   }
 
   //end function
 
   await page.waitForTimeout(5000);
   console.log(filteredRequests);
-
-  //   await page.waitForTimeout(10000);
-  //     await page.close();
-  //     await browser.close();
+  await page.waitForTimeout(10000);
+  await page.close();
+  await browser.close();
+  return filteredRequests;
 }
 
 module.exports = crawl;

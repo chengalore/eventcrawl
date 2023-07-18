@@ -1,11 +1,12 @@
 //this is where you store all values
 const config = {
-  multipleUrl: false,
+  multipleUrl: true,
   crawl: true,
   slowMode: true,
   slowModeMultiplier: 1.5,
   headless: false,
   signUp: {},
+  basicEvents: true,
   elements: {
     inpage: {
       name: "Inpage Widget",
