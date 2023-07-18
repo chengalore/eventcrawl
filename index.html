@@ -37,6 +37,7 @@
   <body>
     <h1>Event Crawler</h1>
     <input type="submit" value="Start" onclick="submit()" />
+    <input type="submit" value="Test" onclick="submitTest()" />
 
     <div id="result">
       <table id="resultTable">
@@ -53,6 +54,32 @@
     </div>
 
     <script type="text/javascript">
+      let result = [
+        {
+          storeName: "lumine",
+          name: "user-saw-widget-button",
+          source: "integration",
+          externalUserId: null,
+        },
+        {
+          storeName: "lumine",
+          name: "user-saw-product",
+          source: "integration",
+          externalUserId: null,
+        },
+        {
+          storeName: "lumine",
+          name: "user-saw-measurements-view",
+          source: "smart-table",
+          externalUserId: null,
+        },
+        {
+          storeName: "lumine",
+          name: "user-opened-widget",
+          source: "inpage",
+          externalUserId: null,
+        },
+      ];
       function submit() {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
@@ -82,6 +109,10 @@
         }
 
         return tableContent;
+      }
+      function submitTest() {
+        var resultTableBody = document.getElementById("resultTableBody");
+        resultTableBody.innerHTML = generateTableFromResponse(result);
       }
     </script>
   </body>
