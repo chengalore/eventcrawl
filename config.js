@@ -1,6 +1,6 @@
 //this is where you store all values
 const config = {
-  multipleUrl: false,
+  multipleUrl: true,
   crawl: true,
   slowMode: true,
   slowModeMultiplier: 2,
