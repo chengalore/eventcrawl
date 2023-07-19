@@ -1,3 +1,4 @@
+//this is my server side
 const express = require("express");
 const app = express();
 const port = 3000;
@@ -13,22 +14,18 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-app.post("/process-url", (req, res) => {
-  const { url } = req.body;
+app.post("/process-urls", (req, res) => {
+  const { urls } = req.body;
 
-  async function crawlURL(url) {
-    try {
-      const result = await crawl(config, url);
-      return result;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+  async function crawlURLs(urls) {
+    const result = await Promise.all(urls.map((url) => crawl(config, url)));
+    return result;
   }
 
-  crawlURL(url)
-    .then((crawler) => {
-      res.send(JSON.stringify(crawler));
+  crawlURLs(urls)
+    .then((crawlers) => {
+      const flattenedResult = crawlers.flat();
+      res.send(JSON.stringify(flattenedResult));
     })
     .catch((error) => {
       console.error(error);

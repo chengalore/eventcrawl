@@ -48,8 +48,13 @@
   </head>
   <body>
     <h1>Event Crawler</h1>
-    <input type="text" id="urlInput" placeholder="Enter URL" />
-    <input type="submit" value="Start" onclick="submit()" />
+    <textarea
+      id="urlInput"
+      placeholder="Enter URL(s)"
+      style="width: 400px; height: 200px"
+    ></textarea>
+    />
+    <button type="submit" onclick="submit()">Start</button>
     <input type="submit" value="Test" onclick="submitTest()" />
 
     <div id="result">
@@ -68,7 +73,7 @@
 
     <script type="text/javascript">
       function submit() {
-        var urlInput = document.getElementById("urlInput").value;
+        var urlInputs = document.getElementById("urlInput").value.split("\n"); // Assuming URLs are entered line-separated
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4 && xhr.status === 200) {
@@ -77,9 +82,9 @@
             resultTableBody.innerHTML = generateTableFromResponse(response);
           }
         };
-        xhr.open("POST", "/process-url", true);
+        xhr.open("POST", "/process-urls", true);
         xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.send(JSON.stringify({ url: urlInput }));
+        xhr.send(JSON.stringify({ urls: urlInputs }));
       }
 
       function generateTableFromResponse(response) {
