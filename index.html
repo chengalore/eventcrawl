@@ -48,6 +48,7 @@
   </head>
   <body>
     <h1>Event Crawler</h1>
+    <input type="text" id="urlInput" placeholder="Enter URL" />
     <input type="submit" value="Start" onclick="submit()" />
     <input type="submit" value="Test" onclick="submitTest()" />
 
@@ -66,33 +67,8 @@
     </div>
 
     <script type="text/javascript">
-      let result = [
-        {
-          storeName: "lumine",
-          name: "user-saw-widget-button",
-          source: "integration",
-          externalUserId: null,
-        },
-        {
-          storeName: "lumine",
-          name: "user-saw-product",
-          source: "integration",
-          externalUserId: null,
-        },
-        {
-          storeName: "lumine",
-          name: "user-saw-measurements-view",
-          source: "smart-table",
-          externalUserId: null,
-        },
-        {
-          storeName: "lumine",
-          name: "user-opened-widget",
-          source: "inpage",
-          externalUserId: null,
-        },
-      ];
       function submit() {
+        var urlInput = document.getElementById("urlInput").value;
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4 && xhr.status === 200) {
@@ -101,13 +77,11 @@
             resultTableBody.innerHTML = generateTableFromResponse(response);
           }
         };
-        xhr.open("GET", "http://localhost:3000/start", true);
-        xhr.setRequestHeader(
-          "Content-Type",
-          "application/x-www-form-urlencoded; charset=UTF-8"
-        );
-        xhr.send();
+        xhr.open("POST", "/process-url", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(JSON.stringify({ url: urlInput }));
       }
+
       function generateTableFromResponse(response) {
         var tableContent = "";
 
@@ -122,6 +96,7 @@
 
         return tableContent;
       }
+
       function submitTest() {
         var resultTableBody = document.getElementById("resultTableBody");
         resultTableBody.innerHTML = generateTableFromResponse(result);

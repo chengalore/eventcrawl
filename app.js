@@ -6,12 +6,38 @@ const config = require("./config");
 const crawl = require("./crawl");
 const urls = require("./library/urls.json");
 
+app.use(express.json());
+app.use(express.static("public"));
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
+app.post("/process-url", (req, res) => {
+  const { url } = req.body;
+
+  async function crawlURL(url) {
+    try {
+      const result = await crawl(config, url);
+      return result;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  crawlURL(url)
+    .then((crawler) => {
+      res.send(JSON.stringify(crawler));
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("Error occurred during crawling.");
+    });
+});
+
 app.get("/start", (req, res) => {
-  async function test() {
+  async function crawlAllURLs() {
     let result = [];
     if (!config.multipleUrl) {
       result.push(crawl(config, urls.lumine));
@@ -21,17 +47,17 @@ app.get("/start", (req, res) => {
         result.push(crawl(config, url));
       }
     }
-    return Promise.all(result); // Wait for all crawl operations to complete
+    return Promise.all(result);
   }
 
-  test()
+  crawlAllURLs()
     .then((crawler) => {
-      const flattenedResult = crawler.flat(); // Flatten the nested arrays of responses
-      res.send(JSON.stringify(flattenedResult)); // Send the flattened result to the client
+      const flattenedResult = crawler.flat();
+      res.send(JSON.stringify(flattenedResult));
     })
     .catch((error) => {
       console.error(error);
-      res.status(500).send("Error occurred during crawling."); // Handle and send an error response
+      res.status(500).send("Error occurred during crawling.");
     });
 });
 
