@@ -8,6 +8,7 @@ async function crawl(config, url) {
     headless: config.headless ? true : false,
   });
   const page = await browser.newPage();
+  await page.setViewport({ width: 1200, height: 800 });
 
   // Enable request interception
   await page.setRequestInterception(true);
@@ -67,7 +68,7 @@ async function crawl(config, url) {
         : el[key].timeout
     );
 
-    if (basicEvents && el[key].name === "Inpage Widget") {
+    if (basicEvents && el[key].name === "Privacy Policy") {
       await page.close();
       await browser.close();
       console.log(filteredRequests);

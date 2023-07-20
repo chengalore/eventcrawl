@@ -6,33 +6,32 @@ async function test() {
   const page = await browser.newPage();
 
   // Instructs the blank page to navigate a URL
-  const url = "https://www.estnation.co.jp/item/detail/1_332_3215811071877/719";
+  const url = "https://i.lumine.jp/item/589230003060004";
   await page.goto(url, { waitUntil: "networkidle0" }); // Wait until there are no more than 0 network connections for at least 500 ms
 
   // Fetches page's title
   const title = await page.title();
   console.info(`The title is: ${title}`);
 
-  await page.evaluate(() => {
-    const shadowRoot = document.querySelector(
-      "#zigzag-worldshopping-checkout"
-    ).shadowRoot;
-    const closeButton = shadowRoot.querySelector(
+  const closeButton2 = await page.evaluate(() => {
+    const button = document.querySelector(
       "#zigzag-test__modal-close:not(.src-___index__zigzag___dycI0)"
     );
-    if (closeButton) {
-      closeButton.click();
-      console.log("closed");
+    console.log("shadowdom found");
+    if (button) {
+      button.click();
+      return true;
+    } else {
+      return false;
     }
   });
-  await page.waitForTimeout(2000);
-  await page.evaluate(() => {
-    const closeButton2 = document.querySelector("#karte-c i");
-    if (closeButton2) {
-      closeButton2.click();
-      console.log("closed2");
-    }
-  });
+
+  if (closeButton2) {
+    console.log("closed2");
+  } else {
+    console.log("Button not found!");
+  }
+
   await page.waitForTimeout(2000);
   console.log("hi");
 }
