@@ -7,12 +7,24 @@ const config = {
   headless: "new",
   signUp: {},
   basicEvents: Boolean,
-  elements: {
+  widgets: {
     inpage: {
       name: "Inpage Widget",
       location: "#vs-inpage",
       timeout: 2000,
     },
+    inpageLuxury: {
+      name: "Inpage Luxury",
+      location: "#vs-inpage-luxury",
+      timeout: 2000,
+    },
+    inpageMini: {
+      name: "Inpage Mini",
+      location: "#vs-inpage-mini",
+      timeout: 2000,
+    },
+  },
+  elements: {
     checkBox: {
       name: "Privacy Policy",
       location: "input#linkText + *",

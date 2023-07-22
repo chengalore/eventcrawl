@@ -1,4 +1,5 @@
 async function waitAndClick(page, selector) {
+  console.log("selector:", selector);
   const element = await page.$(selector.location);
   if (selector.name === "Change Gender to Male") {
     await page.select(selector.location, "male");
