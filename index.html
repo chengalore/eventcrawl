@@ -59,6 +59,31 @@
     />
     <button type="submit" onclick="submit()">Start</button>
     <input type="submit" value="Test" onclick="submitTest()" />
+    <form id="configForm">
+      <label>
+        Update Slow Mode:
+        <input type="checkbox" id="slowModeCheckbox" />
+      </label>
+
+      <label>
+        Slow Mode Multiplier:
+        <input type="number" id="slowModeMultiplierInput" />
+      </label>
+
+      <label>
+        Run Crawler in Silent:
+        <input type="checkbox" id="headlessCheckbox" />
+      </label>
+
+      <label>
+        Basic Events Only:
+        <input type="checkbox" id="basicEventsCheckbox" />
+      </label>
+
+      <!-- Add other form elements for other config properties if needed -->
+
+      <button type="button" onclick="updateConfig()">Update Config</button>
+    </form>
     <!-- Loading message -->
     <div id="loadingMessage">Loading...</div>
 
@@ -99,7 +124,44 @@
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(JSON.stringify({ urls: urlInputs }));
       }
+      function updateConfig() {
+        const configForm = document.getElementById("configForm");
+        const slowModeCheckbox = document.getElementById("slowModeCheckbox");
+        const slowModeMultiplierInput = document.getElementById(
+          "slowModeMultiplierInput"
+        );
+        const headlessCheckbox = document.getElementById("headlessCheckbox");
+        const basicEventsCheckbox = document.getElementById(
+          "basicEventsCheckbox"
+        );
+        // Add other form elements for other config properties if needed
 
+        // Create an object to store the updated config
+        const updatedConfig = {
+          slowMode: slowModeCheckbox.checked,
+          slowModeMultiplier: parseFloat(slowModeMultiplierInput.value),
+          headless: headlessCheckbox.checked,
+          basicEvents: basicEventsCheckbox.checked,
+          // Add other config properties you want to update here
+        };
+
+        // Make a POST request to the server to update the config
+        fetch("/update-config", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedConfig),
+        })
+          .then((response) => response.json())
+          .then((updatedConfigFromServer) => {
+            // Optionally, update the UI to reflect the updated config
+            console.log("Updated Config:", updatedConfigFromServer);
+          })
+          .catch((error) => {
+            console.error("Error updating config:", error);
+          });
+      }
       function generateTableFromResponse(response) {
         var tableContent = "";
 

@@ -14,6 +14,17 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
+// Endpoint to update the configuration
+app.post("/update-config", (req, res) => {
+  const updatedConfig = req.body;
+
+  // Apply the updates to the current config
+  Object.assign(config, updatedConfig);
+
+  // Send the updated config back to the client (optional)
+  res.json(config);
+});
+
 app.post("/process-urls", (req, res) => {
   const { urls } = req.body;
 

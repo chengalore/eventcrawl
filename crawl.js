@@ -1,11 +1,10 @@
 const puppeteer = require("puppeteer");
 const waitAndClick = require("./functions/waitAndClick");
 const checkOverlay = require("./functions/overlayChecker");
-const { basicEvents } = require("./config");
 
 async function crawl(config, url) {
   const browser = await puppeteer.launch({
-    headless: config.headless ? true : false,
+    headless: config.headless ? "new" : false,
   });
   const page = await browser.newPage();
   await page.setViewport({ width: 1200, height: 800 });
@@ -68,7 +67,7 @@ async function crawl(config, url) {
         : el[key].timeout
     );
 
-    if (basicEvents && el[key].name === "Privacy Policy") {
+    if (config.basicEvents && el[key].name === "Privacy Policy") {
       await page.close();
       await browser.close();
       console.log(filteredRequests);
