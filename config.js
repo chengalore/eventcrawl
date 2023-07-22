@@ -11,17 +11,17 @@ const config = {
     inpage: {
       name: "Inpage Widget",
       location: "#vs-inpage",
-      timeout: 2000,
+      timeout: 5000,
     },
     inpageLuxury: {
       name: "Inpage Luxury",
       location: "#vs-inpage-luxury",
-      timeout: 2000,
+      timeout: 5000,
     },
     inpageMini: {
       name: "Inpage Mini",
       location: "#vs-inpage-mini",
-      timeout: 2000,
+      timeout: 5000,
     },
   },
   elements: {
@@ -84,53 +84,53 @@ const config = {
         '#vs-aoyama-main-modal button[class^="_root"][class*="_bodyBtn"] :nth-of-type(3)',
       timeout: 2000,
     },
-    changeGender: {
-      name: "Change Gender to Male",
-      location: '#vs-aoyama-main-modal select[class^="_select"]',
-      timeout: 2000,
-    },
-    saveEditBodyInfo: {
-      name: "Save Edit Body Info",
-      location:
-        'div[class*="_sheetBottomNavBarPC"] [class^="_root_"]:nth-of-type(2)',
-      timeout: 2000,
-    },
-    saveEditBodyInfo: {
-      name: "Save Edit Body Info",
-      location:
-        'div[class*="_sheetBottomNavBarPC"] [class^="_root_"]:nth-of-type(2)',
-      timeout: 2000,
-    },
-    compareBodyxItem: {
-      name: "Compare Body x Item",
-      location: 'div[class*="_bodyBtnContainer"]',
-      timeout: 2000,
-    },
-    compareItemxItem: {
-      name: "Compare Item x Item",
-      location: 'button[class*="_wardrobeItemBtns"] div[class^="_root"]',
-      timeout: 2000,
-    },
-    LogInButton: {
-      name: "Log In Button",
-      location: 'button[class*="_loginButton"] span',
-      timeout: 2000,
-    },
-    LogInEmail: {
-      name: "Log In Email",
-      location: "#SignInEmailInput",
-      timeout: 2000,
-    },
-    LogInPassword: {
-      name: "Log In Password",
-      location: "#signInPasswordInput",
-      timeout: 2000,
-    },
-    SubmitLogInButton: {
-      name: "Submit Log In Button",
-      location: 'button[class*="_submitBtn"] span',
-      timeout: 2000,
-    },
+    // changeGender: {
+    //   name: "Change Gender to Male",
+    //   location: '#vs-aoyama-main-modal select[class^="_select"]',
+    //   timeout: 2000,
+    // },
+    // saveEditBodyInfo: {
+    //   name: "Save Edit Body Info",
+    //   location:
+    //     'div[class*="_sheetBottomNavBarPC"] [class^="_root_"]:nth-of-type(2)',
+    //   timeout: 2000,
+    // },
+    // saveEditBodyInfo: {
+    //   name: "Save Edit Body Info",
+    //   location:
+    //     'div[class*="_sheetBottomNavBarPC"] [class^="_root_"]:nth-of-type(2)',
+    //   timeout: 2000,
+    // },
+    // compareBodyxItem: {
+    //   name: "Compare Body x Item",
+    //   location: 'div[class*="_bodyBtnContainer"]',
+    //   timeout: 2000,
+    // },
+    // compareItemxItem: {
+    //   name: "Compare Item x Item",
+    //   location: 'button[class*="_wardrobeItemBtns"] div[class^="_root"]',
+    //   timeout: 2000,
+    // },
+    // LogInButton: {
+    //   name: "Log In Button",
+    //   location: 'button[class*="_loginButton"] span',
+    //   timeout: 2000,
+    // },
+    // LogInEmail: {
+    //   name: "Log In Email",
+    //   location: "#SignInEmailInput",
+    //   timeout: 2000,
+    // },
+    // LogInPassword: {
+    //   name: "Log In Password",
+    //   location: "#signInPasswordInput",
+    //   timeout: 2000,
+    // },
+    // SubmitLogInButton: {
+    //   name: "Submit Log In Button",
+    //   location: 'button[class*="_submitBtn"] span',
+    //   timeout: 2000,
+    // },
   },
   overlay: {
     name: "overlay",

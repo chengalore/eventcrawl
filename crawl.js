@@ -47,12 +47,16 @@ async function crawl(config, url) {
     waitUntil: "networkidle0",
     timeout: 0,
   });
+  const viewportSize = await page.evaluate(() => ({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  }));
+  await page.reload;
+  await page.waitForTimeout(10000);
 
   async function startCrawling() {
-    console.log("closing overlay");
     try {
-      await checkOverlay(page, config.overlay.location, url);
-      await page.waitForTimeout(config.overlay.timeout);
+      await page.waitForTimeout(10000);
     } catch (error) {
       console.error(error);
     }
