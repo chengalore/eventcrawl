@@ -7,7 +7,6 @@ async function crawl(config, url) {
     headless: config.headless ? "new" : false,
   });
   const page = await browser.newPage();
-  await page.setViewport({ width: 1200, height: 800 });
 
   // Enable request interception
   await page.setRequestInterception(true);
