@@ -23,7 +23,6 @@ async function crawl(config, url) {
         try {
           const { storeName, name, source, externalUserId, isKid } =
             JSON.parse(postData);
-          if (name === "user-saw-widget-button") startCrawling();
           if (storeName !== undefined) {
             filteredRequests.push({
               storeName,
@@ -47,41 +46,18 @@ async function crawl(config, url) {
     waitUntil: "networkidle0",
     timeout: 0,
   });
-  const viewportSize = await page.evaluate(() => ({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  }));
-  await page.reload;
-  await page.waitForTimeout(10000);
 
-  async function startCrawling() {
-    try {
-      await page.waitForTimeout(10000);
-    } catch (error) {
-      console.error(error);
-    }
-
-    console.log("start crawl");
-    try {
-      console.log("try1");
-      await waitAndClick(page, config.widgets.inpage);
-    } catch (error) {
-      try {
-        console.log("try2");
-        await waitAndClick(page, config.widgets.inpageLuxury);
-      } catch (error) {
-        try {
-          console.log("try3");
-          await waitAndClick(page, config.widgets.inpageMini);
-        } catch (error) {
-          console.error(error);
-          console.log("no widget found");
-        }
-      }
-    }
+  // Run function
+  try {
+    await checkOverlay(page, config.overlay.location, url);
+    await page.waitForTimeout(config.overlay.timeout);
+  } catch (error) {
+    await checkOverlay(page, config.overlay.location, url);
+    await page.waitForTimeout(config.overlay.timeout);
   }
 
   const el = config.elements;
+
   for (const key in el) {
     await waitAndClick(page, el[key]);
     await page.waitForTimeout(
